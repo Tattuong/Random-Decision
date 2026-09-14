@@ -49,3 +49,9 @@ class AppColors {
     Color(0xFF55EFC4),
   ];
 }
+
+extension AppBrand on BuildContext {
+  Color get brand => Theme.of(this).colorScheme.primary;
+  Color get canvasBg => Theme.of(this).scaffoldBackgroundColor;
+  Color get panel => Theme.of(this).colorScheme.surface;
+}

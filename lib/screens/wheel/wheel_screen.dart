@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/constants/iap_constants.dart';
+import '../../models/app_theme_preset.dart';
 import '../../providers/shop_provider.dart';
 import '../../providers/wheel_provider.dart';
 import '../../widgets/app_toast.dart';
@@ -82,9 +83,9 @@ class _WheelScreenState extends State<WheelScreen> {
   @override
   Widget build(BuildContext context) {
     final wheel = context.watch<WheelProvider>();
-    final shop = context.watch<ShopProvider>();
-    final bg = shop.activeBackground.gradient;
-    final style = shop.activeWheelStyle;
+    final bg = context.select<ShopProvider, LinearGradient>((s) => s.activeBackground.gradient);
+    final style = context.select<ShopProvider, WheelStyle>((s) => s.activeWheelStyle);
+    final hasRemoveAds = context.select<ShopProvider, bool>((s) => s.hasRemoveAds);
     final labels = wheel.options.map((o) => o.label).toList();
     final hasResult = _resultLabel != null && !wheel.isSpinning;
     final size = MediaQuery.sizeOf(context);
@@ -123,7 +124,7 @@ class _WheelScreenState extends State<WheelScreen> {
                   ],
                 ),
               ),
-              if (!shop.hasRemoveAds)
+              if (!hasRemoveAds)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                   child: Container(
@@ -214,7 +215,7 @@ class _SpinFooter extends StatelessWidget {
           ),
           style: FilledButton.styleFrom(
             backgroundColor: Colors.white,
-            foregroundColor: AppColors.primary,
+            foregroundColor: context.brand,
             disabledBackgroundColor: Colors.white.withValues(alpha: 0.7),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
@@ -266,10 +267,10 @@ class _ResultFooter extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
+                    color: context.brand.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.emoji_events_rounded, color: AppColors.primary, size: 24),
+                  child: Icon(Icons.emoji_events_rounded, color: context.brand, size: 24),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -288,7 +289,7 @@ class _ResultFooter extends StatelessWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
-                          color: AppColors.primary,
+                          color: context.brand,
                           height: 1.1,
                         ),
                       ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/constants/app_strings.dart';
+import '../providers/auth_provider.dart';
 import '../providers/shop_provider.dart';
 import '../providers/wheel_provider.dart';
 import 'main_shell.dart';
@@ -27,9 +28,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   Future<void> _bootstrap() async {
     final shop = context.read<ShopProvider>();
-    await shop.init();
+    final auth = context.read<AuthProvider>();
     final wheel = context.read<WheelProvider>();
-    await wheel.load();
+    await Future.wait([
+      shop.init(),
+      auth.restore(),
+      wheel.load(),
+    ]);
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();

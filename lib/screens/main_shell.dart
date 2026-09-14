@@ -30,7 +30,6 @@ class MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final screens = [
       const WheelScreen(),
       const ChoicesScreen(),
@@ -39,13 +38,13 @@ class MainShellState extends State<MainShell> {
     ];
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(index: _index, children: screens),
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
           decoration: BoxDecoration(
-            color: isDark ? AppColors.darkSurface : AppColors.surface,
+            color: Theme.of(context).colorScheme.surface,
             boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, -2))],
           ),
           child: Padding(
@@ -90,20 +89,20 @@ class _NavItem extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
-            color: active ? AppColors.primary.withValues(alpha: 0.12) : Colors.transparent,
+            color: active ? context.brand.withValues(alpha: 0.12) : Colors.transparent,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(active ? activeIcon : icon, color: active ? AppColors.primary : AppColors.onSurfaceVariant, size: 22),
+              Icon(active ? activeIcon : icon, color: active ? context.brand : AppColors.onSurfaceVariant, size: 22),
               const SizedBox(height: 2),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 9,
                   fontWeight: active ? FontWeight.w800 : FontWeight.w500,
-                  color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+                  color: active ? context.brand : AppColors.onSurfaceVariant,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

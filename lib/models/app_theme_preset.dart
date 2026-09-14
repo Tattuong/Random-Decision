@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../core/constants/app_colors.dart';
 
+final Map<String, ThemeData> _themeCache = {};
+
 class AppThemePreset {
   final String id;
   final Color primary;
@@ -26,19 +28,21 @@ class AppThemePreset {
     required this.balanceGradient,
   });
 
-  ThemeData lightTheme() => _buildTheme(
-        brightness: Brightness.light,
-        scaffold: background,
-        surfaceColor: surface,
-        onSurface: AppColors.onSurface,
-      );
+  ThemeData lightTheme() =>
+      _themeCache.putIfAbsent('$id-light', () => _buildTheme(
+            brightness: Brightness.light,
+            scaffold: background,
+            surfaceColor: surface,
+            onSurface: AppColors.onSurface,
+          ));
 
-  ThemeData darkTheme() => _buildTheme(
-        brightness: Brightness.dark,
-        scaffold: darkBackground,
-        surfaceColor: darkSurface,
-        onSurface: const Color(0xFFF1F5F9),
-      );
+  ThemeData darkTheme() =>
+      _themeCache.putIfAbsent('$id-dark', () => _buildTheme(
+            brightness: Brightness.dark,
+            scaffold: darkBackground,
+            surfaceColor: darkSurface,
+            onSurface: const Color(0xFFF1F5F9),
+          ));
 
   ThemeData _buildTheme({
     required Brightness brightness,
@@ -48,8 +52,7 @@ class AppThemePreset {
   }) {
     final isDark = brightness == Brightness.dark;
     return ThemeData(
-      useMaterial3: true,
-      brightness: brightness,
+      primaryColor: isDark ? primaryLight : primary,
       scaffoldBackgroundColor: scaffold,
       colorScheme: isDark
           ? ColorScheme.dark(

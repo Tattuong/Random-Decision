@@ -26,7 +26,7 @@ class AppToast {
         title: title,
         message: message,
         icon: icon,
-        color: color ?? AppColors.primary,
+        color: color ?? context.brand,
         onDismiss: () => entry.remove(),
       ),
     );

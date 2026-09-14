@@ -37,14 +37,18 @@ class BillingService {
       _subscription = _iap.purchaseStream.listen(
         (purchases) async {
           for (final purchase in purchases) {
-            if (purchase.status == PurchaseStatus.pending) continue;
-
-            if (purchase.status == PurchaseStatus.error) {
-              lastError = purchase.error?.message ?? 'Purchase failed';
-              onError();
-            } else if (purchase.status == PurchaseStatus.purchased ||
-                purchase.status == PurchaseStatus.restored) {
-              onPurchase(purchase);
+            switch (purchase.status) {
+              case PurchaseStatus.pending:
+                break;
+              case PurchaseStatus.error:
+                lastError = purchase.error?.message ?? 'Purchase failed';
+                onError();
+              case PurchaseStatus.canceled:
+                lastError = null;
+                onError();
+              case PurchaseStatus.purchased:
+              case PurchaseStatus.restored:
+                onPurchase(purchase);
             }
 
             if (purchase.pendingCompletePurchase) {

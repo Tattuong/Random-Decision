@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,8 +40,10 @@ class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMix
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 4200));
+    _animation = const AlwaysStoppedAnimation(0);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        _rotation = _animation.value;
         widget.onSpinComplete?.call();
       }
     });
@@ -73,7 +76,7 @@ class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMix
 
     _animation = Tween<double>(begin: _rotation, end: end).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    )..addListener(() => setState(() => _rotation = _animation.value));
+    );
 
     _controller
       ..reset()
@@ -103,8 +106,12 @@ class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMix
           ),
           Positioned(
             top: 28,
-            child: Transform.rotate(
-              angle: _rotation,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                final angle = _controller.isAnimating ? _animation.value : _rotation;
+                return Transform.rotate(angle: angle, child: child);
+              },
               child: Container(
                 width: size,
                 height: size,
@@ -112,14 +119,14 @@ class _SpinWheelState extends State<SpinWheel> with SingleTickerProviderStateMix
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: style.glowColor.withValues(alpha: 0.45),
-                      blurRadius: style.glowBlur,
+                      color: style.glowColor.withValues(alpha: 0.35),
+                      blurRadius: style.glowBlur * 0.6,
                       spreadRadius: style.glowSpread,
                     ),
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      blurRadius: 24,
-                      offset: const Offset(0, 12),
+                      color: Colors.black.withValues(alpha: 0.18),
+                      blurRadius: 16,
+                      offset: const Offset(0, 8),
                     ),
                   ],
                 ),
@@ -312,5 +319,5 @@ class _WheelPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _WheelPainter oldDelegate) =>
-      oldDelegate.labels != labels || oldDelegate.style != style;
+      !listEquals(oldDelegate.labels, labels) || oldDelegate.style != style;
 }

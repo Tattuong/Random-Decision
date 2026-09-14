@@ -80,12 +80,11 @@ class _ChoicesScreenState extends State<ChoicesScreen> {
   Widget build(BuildContext context) {
     final wheel = context.watch<WheelProvider>();
     final shop = context.watch<ShopProvider>();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final unlimited = shop.hasUnlimitedChoices;
     final max = wheel.maxChoices(unlimited);
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(AppStrings.t(context, 'choicesTitle')),
         actions: [
