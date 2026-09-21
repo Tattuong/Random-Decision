@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'core/constants/ad_constants.dart';
 import 'core/navigation/app_navigator.dart';
+import 'core/services/ad_service.dart';
 import 'core/services/storage_service.dart';
 import 'models/app_theme_preset.dart';
 import 'providers/auth_provider.dart';
@@ -28,6 +32,9 @@ Future<void> main() async {
   await appLocaleProvider.init();
 
   runApp(const RandomDecisionApp());
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (AdConstants.isConfigured) unawaited(AdService.init());
+  });
 }
 
 class RandomDecisionApp extends StatelessWidget {

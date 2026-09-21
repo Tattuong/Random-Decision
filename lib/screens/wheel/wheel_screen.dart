@@ -85,7 +85,6 @@ class _WheelScreenState extends State<WheelScreen> {
     final wheel = context.watch<WheelProvider>();
     final bg = context.select<ShopProvider, LinearGradient>((s) => s.activeBackground.gradient);
     final style = context.select<ShopProvider, WheelStyle>((s) => s.activeWheelStyle);
-    final hasRemoveAds = context.select<ShopProvider, bool>((s) => s.hasRemoveAds);
     final labels = wheel.options.map((o) => o.label).toList();
     final hasResult = _resultLabel != null && !wheel.isSpinning;
     final size = MediaQuery.sizeOf(context);
@@ -124,24 +123,6 @@ class _WheelScreenState extends State<WheelScreen> {
                   ],
                 ),
               ),
-              if (!hasRemoveAds)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white24),
-                    ),
-                    child: Text(
-                      AppStrings.t(context, 'adPlaceholder'),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white70, fontSize: 11),
-                    ),
-                  ),
-                ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {

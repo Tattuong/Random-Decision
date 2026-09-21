@@ -3,7 +3,7 @@ description: Random Decision - Spin the wheel, make choices & unlock premium the
 
 publish_to: "none"
 
-version: 1.0.2+3
+version: 1.0.3+4
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
@@ -22,6 +22,7 @@ dependencies:
   in_app_purchase: ^3.2.1
   http: ^1.2.2
   share_plus: ^10.1.4
+  google_mobile_ads: ^5.3.1
 
 dev_dependencies:
   flutter_test:

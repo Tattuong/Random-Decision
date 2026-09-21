@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_strings.dart';
+import '../widgets/ad_banner_slot.dart';
 import 'settings/settings_screen.dart';
 import 'shop/shop_screen.dart';
 import 'wheel/choices_screen.dart';
@@ -40,25 +41,31 @@ class MainShellState extends State<MainShell> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(index: _index, children: screens),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, -2))],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            child: Row(
-              children: [
-                _NavItem(icon: Icons.casino_outlined, activeIcon: Icons.casino_rounded, label: AppStrings.t(context, 'navWheel'), active: _index == 0, onTap: () => setState(() => _index = 0)),
-                _NavItem(icon: Icons.list_alt_outlined, activeIcon: Icons.list_alt_rounded, label: AppStrings.t(context, 'navChoices'), active: _index == 1, onTap: () => setState(() => _index = 1)),
-                _NavItem(icon: Icons.stars_outlined, activeIcon: Icons.stars_rounded, label: AppStrings.t(context, 'navShop'), active: _index == 2, onTap: () => setState(() => _index = 2)),
-                _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings_rounded, label: AppStrings.t(context, 'navSettings'), active: _index == 3, onTap: () => setState(() => _index = 3)),
-              ],
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const AdBannerSlot(),
+          SafeArea(
+            top: false,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, -2))],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  children: [
+                    _NavItem(icon: Icons.casino_outlined, activeIcon: Icons.casino_rounded, label: AppStrings.t(context, 'navWheel'), active: _index == 0, onTap: () => setState(() => _index = 0)),
+                    _NavItem(icon: Icons.list_alt_outlined, activeIcon: Icons.list_alt_rounded, label: AppStrings.t(context, 'navChoices'), active: _index == 1, onTap: () => setState(() => _index = 1)),
+                    _NavItem(icon: Icons.stars_outlined, activeIcon: Icons.stars_rounded, label: AppStrings.t(context, 'navShop'), active: _index == 2, onTap: () => setState(() => _index = 2)),
+                    _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings_rounded, label: AppStrings.t(context, 'navSettings'), active: _index == 3, onTap: () => setState(() => _index = 3)),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
